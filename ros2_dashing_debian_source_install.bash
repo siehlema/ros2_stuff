@@ -1,6 +1,7 @@
 #!/bin/bash
 # Script of ROS2 Dashing Debian Source Install Setup
 # Steps from https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Development-Setup/
+# Tested on Ubuntu 18.04
 
 echo "Starting ROS2 Dashing Setup"
 echo "(Steps from https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Development-Setup/)"
@@ -73,15 +74,14 @@ sudo apt install -q --yes --force-yes \
 cd /opt/rti.com/rti_connext_dds-5.3.1/resource/scripts && source ./rtisetenv_x64Linux3gcc5.4.0.bash; cd -
 
 # Build the workspace
-cd ~/ros2_ws/
+touch ~/ros2_ws_dashing/src/ros2/system_tests/test_cli/AMENT_IGNORE
+cd ~/ros2_ws_dashing/
 colcon build --symlink-install
-
-# Local Setup
-. install/local_setup.bash
 
 # Done
 echo "ROS2 Dashing Setup is done."
 echo "You can now test your environment with:"
+echo ". install/local_setup.bash"
 echo "ros2 run demo_nodes_cpp talker"
 echo "and in another Tab:"
 echo "ros2 run demo_nodes_py listener"
