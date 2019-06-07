@@ -1,6 +1,9 @@
 #!/bin/bash
-# Script of ROS2 Debian Source Install Setup
-# from https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Development-Setup/
+# Script of ROS2 Dashing Debian Source Install Setup
+# Steps from https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Development-Setup/
+
+echo "Starting ROS2 Dashing Setup"
+echo "(Steps from https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Development-Setup/)"
 
 # Setup Locale
 sudo locale-gen en_US en_US.UTF-8
@@ -53,8 +56,8 @@ sudo apt install --no-install-recommends -y \
   libtinyxml2-dev
 
 # Get ROS2 Dashing Code
-mkdir -p ~/ros2_ws/src
-cd ~/ros2_ws
+mkdir -p ~/ros2_ws_dashing/src
+cd ~/ros2_ws_dashing
 wget https://raw.githubusercontent.com/ros2/ros2/release-latest/ros2.repos
 vcs import src < ros2.repos
 
@@ -65,10 +68,20 @@ rosdep install --from-paths src --ignore-src --rosdistro dashing -y --skip-keys 
 
 # Install more DDS implementations
 sudo apt install libopensplice69  # from packages.ros.org/ros2/ubuntu
-sudo apt install -q -y \
+sudo apt install -q --yes --force-yes \
     rti-connext-dds-5.3.1  # from packages.ros.org/ros2/ubuntu
 cd /opt/rti.com/rti_connext_dds-5.3.1/resource/scripts && source ./rtisetenv_x64Linux3gcc5.4.0.bash; cd -
 
 # Build the workspace
 cd ~/ros2_ws/
 colcon build --symlink-install
+
+# Local Setup
+. install/local_setup.bash
+
+# Done
+echo "ROS2 Dashing Setup is done."
+echo "You can now test your environment with:"
+echo "ros2 run demo_nodes_cpp talker"
+echo "and in another Tab:"
+echo "ros2 run demo_nodes_py listener"
